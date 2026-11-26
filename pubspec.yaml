@@ -1,0 +1,38 @@
+name: iloop
+description: "I'LOOP - Circular Economy & Reuse Marketplace Flutter Application"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.2.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # Backend & Supabase
+  supabase_flutter: ^2.8.0
+
+  # State Management
+  provider: ^6.1.2
+
+  # Media & UI Utilities
+  image_picker: ^1.1.2
+  cached_network_image: ^3.4.1
+  google_fonts: ^6.2.1
+  intl: ^0.19.0
+  flutter_staggered_grid_view: ^0.7.0
+  uuid: ^4.5.1
+  flutter_svg: ^2.0.10+1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
