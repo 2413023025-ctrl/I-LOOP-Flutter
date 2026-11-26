@@ -14,23 +14,7 @@ subprojects {
 }
 
 subprojects {
-    plugins.withId("com.android.library") {
-        android {
-            lint {
-                checkReleaseBuilds = false
-                abortOnError = false
-            }
-        }
-    }
-    plugins.withId("com.android.application") {
-        android {
-            lint {
-                checkReleaseBuilds = false
-                abortOnError = false
-            }
-        }
-    }
-    tasks.matching { it.name.contains("lintVital") }.configureEach {
+    tasks.matching { it.name.toLowerCase().contains("lintvital") }.configureEach {
         enabled = false
     }
 }
