@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../core/constants/app_categories.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../data/models/item_model.dart';
+import '../../../data/models/profile_model.dart';
 import '../../../state/auth_provider.dart';
 import '../../../state/items_provider.dart';
 import '../auth/login_screen.dart';
@@ -22,6 +24,214 @@ class _ProfileScreenState extends State<ProfileScreen> {
       context.read<AuthProvider>().loadCurrentProfile();
       context.read<ItemsProvider>().fetchMyItems();
     });
+  }
+
+  void _showEditProfileDialog(BuildContext context, ProfileModel? currentProfile) {
+    final nameController = TextEditingController(text: currentProfile?.fullName ?? '');
+    final cityController = TextEditingController(text: currentProfile?.city ?? '');
+    final campusController = TextEditingController(text: currentProfile?.campusOrArea ?? '');
+    final phoneController = TextEditingController(text: currentProfile?.phoneNumber ?? '');
+    final formKey = GlobalKey<FormState>();
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: 20,
+                bottom: MediaQuery.of(ctx).viewInsets.bottom + 24,
+              ),
+              child: SingleChildScrollView(
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Atur Kota / Edit Profil',
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.close),
+                            onPressed: () => Navigator.pop(ctx),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 6),
+                      const Text(
+                        'Ubah kota domisili agar filter barang di sekitar Anda lebih akurat.',
+                        style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                      ),
+                      const Divider(height: 24),
+
+                      // Nama Lengkap
+                      const Text('Nama Lengkap', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                      const SizedBox(height: 6),
+                      TextFormField(
+                        controller: nameController,
+                        decoration: const InputDecoration(
+                          hintText: 'Nama lengkap Anda',
+                          prefixIcon: Icon(Icons.person_outline),
+                        ),
+                        validator: (val) {
+                          if (val == null || val.trim().isEmpty) return 'Nama tidak boleh kosong';
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 14),
+
+                      // Kota / Tempat Tinggal (Wajib)
+                      Row(
+                        children: const [
+                          Text('Kota / Tempat Tinggal', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                          SizedBox(width: 4),
+                          Text('*', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                      const SizedBox(height: 6),
+                      TextFormField(
+                        controller: cityController,
+                        decoration: InputDecoration(
+                          hintText: 'Contoh: Bandar Lampung, Bandung, dll.',
+                          prefixIcon: const Icon(Icons.location_city_outlined),
+                          suffixIcon: PopupMenuButton<String>(
+                            icon: const Icon(Icons.arrow_drop_down, color: AppColors.primary),
+                            tooltip: 'Pilih dari daftar kota',
+                            onSelected: (String selectedCity) {
+                              setModalState(() {
+                                cityController.text = selectedCity;
+                              });
+                            },
+                            itemBuilder: (_) {
+                              return IndonesianCities.list.map((String city) {
+                                return PopupMenuItem<String>(
+                                  value: city,
+                                  child: Text(city),
+                                );
+                              }).toList();
+                            },
+                          ),
+                        ),
+                        validator: (val) {
+                          if (val == null || val.trim().isEmpty) {
+                            return 'Kota tempat tinggal wajib diisi';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 8),
+
+                      // Quick Chips Pilihan Kota
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            'Bandar Lampung',
+                            'Jakarta Selatan',
+                            'Bandung',
+                            'Surabaya',
+                            'Yogyakarta',
+                          ].map((city) {
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 6),
+                              child: ActionChip(
+                                label: Text(city, style: const TextStyle(fontSize: 11)),
+                                backgroundColor: AppColors.primary.withOpacity(0.08),
+                                onPressed: () {
+                                  setModalState(() {
+                                    cityController.text = city;
+                                  });
+                                },
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+
+                      // Area / Kampus (Opsional)
+                      const Text('Area / Kampus / Kecamatan (Opsional)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                      const SizedBox(height: 6),
+                      TextFormField(
+                        controller: campusController,
+                        decoration: const InputDecoration(
+                          hintText: 'Contoh: UNILA, ITB, Sekitar Sukarame',
+                          prefixIcon: Icon(Icons.school_outlined),
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+
+                      // Nomor Telepon (Opsional)
+                      const Text('Nomor WhatsApp (Opsional)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                      const SizedBox(height: 6),
+                      TextFormField(
+                        controller: phoneController,
+                        keyboardType: TextInputType.phone,
+                        decoration: const InputDecoration(
+                          hintText: 'Contoh: 081234567890',
+                          prefixIcon: Icon(Icons.phone_outlined),
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+
+                      // Tombol Simpan
+                      SizedBox(
+                        width: double.infinity,
+                        height: 48,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            if (!formKey.currentState!.validate()) return;
+
+                            final success = await this.context.read<AuthProvider>().updateProfile(
+                              fullName: nameController.text.trim(),
+                              city: cityController.text.trim(),
+                              campusOrArea: campusController.text.trim().isEmpty ? null : campusController.text.trim(),
+                              phoneNumber: phoneController.text.trim().isEmpty ? null : phoneController.text.trim(),
+                            );
+
+                            if (mounted) {
+                              Navigator.pop(ctx);
+                              if (success) {
+                                ScaffoldMessenger.of(this.context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Profil dan kota tempat tinggal berhasil disimpan!'),
+                                    backgroundColor: AppColors.primary,
+                                  ),
+                                );
+                              } else {
+                                ScaffoldMessenger.of(this.context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Gagal menyimpan perubahan profil.'),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                              }
+                            }
+                          },
+                          child: const Text('Simpan Perubahan', style: TextStyle(fontWeight: FontWeight.bold)),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 
   void _confirmLogout() {
@@ -61,6 +271,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final profile = auth.currentProfile;
     final itemsProv = context.watch<ItemsProvider>();
 
+    final String? userCity = profile?.city;
+    final bool hasCity = userCity != null && userCity.trim().isNotEmpty && userCity != 'Kota belum diatur';
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -82,7 +295,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: ListView(
           padding: const EdgeInsets.all(20),
           children: [
-            // User info card
+            // User info card with Edit Kota / Edit Profil Button
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -90,40 +303,81 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(color: AppColors.border),
               ),
-              child: Row(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CircleAvatar(
-                    radius: 30,
-                    backgroundColor: AppColors.primary.withOpacity(0.15),
-                    child: Text(
-                      profile != null && profile.fullName.isNotEmpty ? profile.fullName[0] : 'U',
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.primary,
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 30,
+                        backgroundColor: AppColors.primary.withOpacity(0.15),
+                        child: Text(
+                          profile != null && profile.fullName.isNotEmpty ? profile.fullName[0].toUpperCase() : 'U',
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.primary,
+                          ),
+                        ),
                       ),
-                    ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              profile?.fullName ?? 'Pengguna I\'LOOP',
+                              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 4),
+                            Row(
+                              children: [
+                                const Icon(Icons.location_on, size: 14, color: AppColors.primary),
+                                const SizedBox(width: 4),
+                                Expanded(
+                                  child: Text(
+                                    hasCity
+                                        ? '${profile!.city}${profile.campusOrArea != null ? " • ${profile.campusOrArea}" : ""}'
+                                        : 'Kota belum diatur',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: hasCity ? FontWeight.w600 : FontWeight.normal,
+                                      color: hasCity ? AppColors.textPrimary : Colors.orange[800],
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              auth.currentUser?.email ?? '',
+                              style: const TextStyle(fontSize: 12, color: AppColors.textMuted),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          profile?.fullName ?? 'Pengguna I\'LOOP',
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          '${profile?.city ?? "Kota belum diatur"}${profile?.campusOrArea != null ? " • ${profile!.campusOrArea}" : ""}',
-                          style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          auth.currentUser?.email ?? '',
-                          style: const TextStyle(fontSize: 12, color: AppColors.textMuted),
-                        ),
-                      ],
+                  const SizedBox(height: 14),
+
+                  // Tombol Atur Kota / Edit Profil (Menggantikan status teks statis)
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                      icon: const Icon(Icons.edit_location_alt_outlined, size: 18),
+                      label: Text(
+                        hasCity ? 'Atur Kota / Edit Profil' : 'Atur Kota Tempat Tinggal',
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: AppColors.primary,
+                        side: const BorderSide(color: AppColors.primary),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                      ),
+                      onPressed: () => _showEditProfileDialog(context, profile),
                     ),
                   ),
                 ],
@@ -216,7 +470,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         const SizedBox(height: 6),
                         Text(
-                          'Tipe: ${item.listingType.name.toUpperCase()} • Kategori: ${item.category}',
+                          'Tipe: ${item.listingType.name.toUpperCase()} • Kategori: ${item.category} • Kota: ${item.city}',
                           style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
                         ),
                         const SizedBox(height: 10),

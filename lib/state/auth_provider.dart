@@ -21,6 +21,11 @@ class AuthProvider extends ChangeNotifier {
   }
 
   void _init() {
+    // Muat profil segera jika sesi persisten sudah aktif pada startup
+    if (_repo.isAuthenticated) {
+      loadCurrentProfile();
+    }
+
     _repo.authStateChanges.listen((event) async {
       if (event.session != null) {
         await loadCurrentProfile();
@@ -62,13 +67,23 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> signUp(String email, String password, String fullName) async {
+  Future<bool> signUp({
+    required String email,
+    required String password,
+    required String fullName,
+    required String city,
+  }) async {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
 
     try {
-      await _repo.signUp(email: email, password: password, fullName: fullName);
+      await _repo.signUp(
+        email: email,
+        password: password,
+        fullName: fullName,
+        city: city,
+      );
       await loadCurrentProfile();
       return true;
     } catch (e) {
@@ -85,18 +100,29 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateProfile({
+  Future<bool> updateProfile({
     required String fullName,
     required String city,
     String? campusOrArea,
     String? phoneNumber,
   }) async {
-    await _repo.updateProfile(
-      fullName: fullName,
-      city: city,
-      campusOrArea: campusOrArea,
-      phoneNumber: phoneNumber,
-    );
-    await loadCurrentProfile();
+    _isLoading = true;
+    notifyListeners();
+    try {
+      await _repo.updateProfile(
+        fullName: fullName,
+        city: city,
+        campusOrArea: campusOrArea,
+        phoneNumber: phoneNumber,
+      );
+      await loadCurrentProfile();
+      return true;
+    } catch (e) {
+      _errorMessage = e.toString();
+      return false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 }

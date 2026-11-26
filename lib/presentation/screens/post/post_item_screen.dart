@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../core/constants/app_categories.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../data/models/item_model.dart';
+import '../../../state/auth_provider.dart';
 import '../../../state/items_provider.dart';
 import '../../widgets/custom_button.dart';
 
@@ -29,6 +30,19 @@ class _PostItemScreenState extends State<PostItemScreen> {
   String _city = IndonesianCities.list.first;
   final List<File> _images = [];
   bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final profileCity = context.read<AuthProvider>().currentProfile?.city;
+      if (profileCity != null && profileCity.isNotEmpty && IndonesianCities.list.contains(profileCity)) {
+        setState(() {
+          _city = profileCity;
+        });
+      }
+    });
+  }
 
   @override
   void dispose() {

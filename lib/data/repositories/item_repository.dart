@@ -23,8 +23,8 @@ class ItemRepository {
     if (category != null && category != 'Semua') {
       query = query.eq('category', category);
     }
-    if (city != null && city != 'Semua') {
-      query = query.eq('city', city);
+    if (city != null && city != 'Semua' && city != 'Semua Kota' && city.trim().isNotEmpty) {
+      query = query.ilike('city', '%${city.trim()}%');
     }
     if (searchQuery != null && searchQuery.trim().isNotEmpty) {
       query = query.ilike('title', '%${searchQuery.trim()}%');

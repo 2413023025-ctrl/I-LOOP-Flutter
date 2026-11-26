@@ -20,6 +20,10 @@ void main() async {
     anonKey: AppConfig.supabaseAnonKey,
   );
 
+  // Periksa apakah sudah ada sesi persisten yang aktif pada Supabase client
+  final bool hasActiveSession = Supabase.instance.client.auth.currentSession != null;
+  debugPrint('Supabase initialized. Active session exists: $hasActiveSession');
+
   runApp(const ILoopApp());
 }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../core/constants/app_categories.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../state/auth_provider.dart';
 import '../../widgets/custom_button.dart';
@@ -15,6 +16,7 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
+  final _cityController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _obscurePassword = true;
@@ -23,6 +25,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
+    _cityController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -32,9 +35,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     final auth = context.read<AuthProvider>();
     final success = await auth.signUp(
-      _emailController.text.trim(),
-      _passwordController.text,
-      _nameController.text.trim(),
+      email: _emailController.text.trim(),
+      password: _passwordController.text,
+      fullName: _nameController.text.trim(),
+      city: _cityController.text.trim(),
     );
 
     if (success && mounted) {
@@ -105,6 +109,74 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     if (val == null || val.trim().isEmpty) return 'Masukkan nama Anda';
                     return null;
                   },
+                ),
+                const SizedBox(height: 18),
+
+                // Kota / Tempat Tinggal (Wajib)
+                Row(
+                  children: const [
+                    Text('Kota / Tempat Tinggal', style: TextStyle(fontWeight: FontWeight.bold)),
+                    SizedBox(width: 4),
+                    Text('*', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                TextFormField(
+                  controller: _cityController,
+                  decoration: InputDecoration(
+                    hintText: 'Contoh: Bandar Lampung, Jakarta Selatan, dll.',
+                    prefixIcon: const Icon(Icons.location_city_outlined),
+                    suffixIcon: PopupMenuButton<String>(
+                      icon: const Icon(Icons.arrow_drop_down, color: AppColors.primary),
+                      tooltip: 'Pilih Kota',
+                      onSelected: (String city) {
+                        setState(() {
+                          _cityController.text = city;
+                        });
+                      },
+                      itemBuilder: (BuildContext context) {
+                        return IndonesianCities.list.map((String city) {
+                          return PopupMenuItem<String>(
+                            value: city,
+                            child: Text(city),
+                          );
+                        }).toList();
+                      },
+                    ),
+                  ),
+                  validator: (val) {
+                    if (val == null || val.trim().isEmpty) {
+                      return 'Kota / tempat tinggal wajib diisi';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 8),
+                // Pilihan Kota Cepat
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      'Bandar Lampung',
+                      'Jakarta Selatan',
+                      'Bandung',
+                      'Surabaya',
+                      'Yogyakarta',
+                    ].map((city) {
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 6),
+                        child: ActionChip(
+                          label: Text(city, style: const TextStyle(fontSize: 11)),
+                          backgroundColor: AppColors.primary.withOpacity(0.08),
+                          onPressed: () {
+                            setState(() {
+                              _cityController.text = city;
+                            });
+                          },
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
                 const SizedBox(height: 18),
 

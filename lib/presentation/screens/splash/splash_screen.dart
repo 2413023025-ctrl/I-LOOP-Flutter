@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../state/auth_provider.dart';
 import '../auth/login_screen.dart';
@@ -20,16 +21,29 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _checkSession() async {
-    await Future.delayed(const Duration(milliseconds: 1200));
+    // Delay estetis untuk menampilkan logo I'LOOP
+    await Future.delayed(const Duration(milliseconds: 1000));
     if (!mounted) return;
 
+    // Cek apakah Supabase memiliki sesi tersimpan yang persisten
+    final session = Supabase.instance.client.auth.currentSession;
     final auth = context.read<AuthProvider>();
-    if (auth.isAuthenticated) {
+
+    if (session != null || auth.isAuthenticated) {
+      // Auto-Login: pengguna sudah login sebelumnya, langsung arahkan ke beranda utama
+      try {
+        await auth.loadCurrentProfile();
+      } catch (e) {
+        debugPrint('Auto-login: Gagal memuat profil: $e');
+      }
+      if (!mounted) return;
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const MainNavScreen()),
       );
     } else {
+      // Pengguna belum login atau sudah logout
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const LoginScreen()),

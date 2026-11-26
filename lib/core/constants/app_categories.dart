@@ -20,6 +20,7 @@ class AppCategories {
 
 class IndonesianCities {
   static const List<String> list = [
+    'Bandar Lampung',
     'Jakarta Selatan',
     'Jakarta Pusat',
     'Jakarta Barat',
@@ -38,8 +39,18 @@ class IndonesianCities {
     'Surakarta (Solo)',
     'Medan',
     'Palembang',
+    'Padang',
+    'Pekanbaru',
+    'Batam',
+    'Balikpapan',
+    'Samarinda',
+    'Banjarmasin',
+    'Pontianak',
     'Makassar',
+    'Manado',
     'Denpasar',
+    'Mataram',
+    'Kupang',
     'Lainnya',
   ];
 }

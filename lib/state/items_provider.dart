@@ -13,6 +13,7 @@ class ItemsProvider extends ChangeNotifier {
 
   ListingType? _selectedType;
   String _selectedCategory = 'Semua';
+  String _selectedCity = 'Semua Kota';
   String _searchQuery = '';
 
   List<ItemModel> get items => _items;
@@ -21,6 +22,7 @@ class ItemsProvider extends ChangeNotifier {
   String? get errorMessage => _errorMessage;
   ListingType? get selectedType => _selectedType;
   String get selectedCategory => _selectedCategory;
+  String get selectedCity => _selectedCity;
   String get searchQuery => _searchQuery;
 
   Future<void> fetchItems() async {
@@ -32,6 +34,7 @@ class ItemsProvider extends ChangeNotifier {
         filterType: _selectedType,
         category: _selectedCategory,
         searchQuery: _searchQuery,
+        city: _selectedCity == 'Semua Kota' ? null : _selectedCity,
       );
       _errorMessage = null;
     } catch (e) {
@@ -62,6 +65,11 @@ class ItemsProvider extends ChangeNotifier {
 
   void setCategory(String category) {
     _selectedCategory = category;
+    fetchItems();
+  }
+
+  void setCity(String city) {
+    _selectedCity = city;
     fetchItems();
   }
 
