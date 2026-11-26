@@ -13,21 +13,25 @@ subprojects {
     project.evaluationDependsOn(':app')
 }
 
-subprojects { project ->
-    afterEvaluate {
-        if (project.hasProperty('android')) {
-            project.android {
-                lintOptions {
-                    checkReleaseBuilds = false
-                    abortOnError = false
-                }
+subprojects {
+    plugins.withId("com.android.library") {
+        android {
+            lint {
+                checkReleaseBuilds = false
+                abortOnError = false
             }
         }
     }
-    project.tasks.configureEach { task ->
-        if (task.name.startsWith("lintVital")) {
-            task.enabled = false
+    plugins.withId("com.android.application") {
+        android {
+            lint {
+                checkReleaseBuilds = false
+                abortOnError = false
+            }
         }
+    }
+    tasks.matching { it.name.contains("lintVital") }.configureEach {
+        enabled = false
     }
 }
 
