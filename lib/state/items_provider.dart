@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import '../../data/models/item_model.dart';
-import '../../data/repositories/item_repository.dart';
+import '../data/models/item_model.dart';
+import '../data/repositories/item_repository.dart';
 
 class ItemsProvider extends ChangeNotifier {
   final ItemRepository _repo = ItemRepository();

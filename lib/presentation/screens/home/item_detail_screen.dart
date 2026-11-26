@@ -1,14 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../core/constants/app_colors.dart';
-import '../../core/utils/currency_formatter.dart';
-import '../../data/models/item_model.dart';
-import '../../data/models/swap_proposal_model.dart';
-import '../../data/repositories/item_repository.dart';
-import '../../state/auth_provider.dart';
-import '../../state/chat_provider.dart';
-import '../../presentation/widgets/custom_button.dart';
+import '../../../core/constants/app_colors.dart';
+import '../../../core/utils/currency_formatter.dart';
+import '../../../data/models/item_model.dart';
+import '../../../data/models/swap_proposal_model.dart';
+import '../../../data/repositories/item_repository.dart';
+import '../../../state/auth_provider.dart';
+import '../../../state/chat_provider.dart';
+import '../../widgets/custom_button.dart';
 import '../chat/chat_room_screen.dart';
 import 'create_proposal_sheet.dart';
 

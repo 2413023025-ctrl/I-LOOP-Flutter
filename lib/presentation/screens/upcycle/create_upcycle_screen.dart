@@ -2,9 +2,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import '../../core/constants/app_colors.dart';
-import '../../state/upcycle_provider.dart';
-import '../widgets/custom_button.dart';
+import '../../../core/constants/app_colors.dart';
+import '../../../state/upcycle_provider.dart';
+import '../../widgets/custom_button.dart';
 
 class CreateUpcycleScreen extends StatefulWidget {
   const CreateUpcycleScreen({super.key});

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../data/models/profile_model.dart';
-import '../../data/repositories/auth_repository.dart';
+import '../data/models/profile_model.dart';
+import '../data/repositories/auth_repository.dart';
 
 class AuthProvider extends ChangeNotifier {
   final AuthRepository _repo = AuthRepository();

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../core/constants/app_colors.dart';
-import '../../state/auth_provider.dart';
-import '../../presentation/widgets/custom_button.dart';
+import '../../../core/constants/app_colors.dart';
+import '../../../state/auth_provider.dart';
+import '../../widgets/custom_button.dart';
 import '../main_nav.dart';
 import 'register_screen.dart';
 

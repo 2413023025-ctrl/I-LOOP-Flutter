@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../data/models/message_model.dart';
-import '../../data/repositories/chat_repository.dart';
+import '../data/models/message_model.dart';
+import '../data/repositories/chat_repository.dart';
 
 class ChatProvider extends ChangeNotifier {
   final ChatRepository _repo = ChatRepository();

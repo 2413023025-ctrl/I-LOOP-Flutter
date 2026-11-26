@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../core/constants/app_colors.dart';
-import '../../data/models/item_model.dart';
-import '../../state/auth_provider.dart';
-import '../../state/items_provider.dart';
+import '../../../core/constants/app_colors.dart';
+import '../../../data/models/item_model.dart';
+import '../../../state/auth_provider.dart';
+import '../../../state/items_provider.dart';
 import '../auth/login_screen.dart';
-import '../widgets/eco_badge_widget.dart';
+import '../../widgets/eco_badge_widget.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});

@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import '../../data/models/upcycle_post_model.dart';
-import '../../data/repositories/upcycle_repository.dart';
+import '../data/models/upcycle_post_model.dart';
+import '../data/repositories/upcycle_repository.dart';
 
 class UpcycleProvider extends ChangeNotifier {
   final UpcycleRepository _repo = UpcycleRepository();

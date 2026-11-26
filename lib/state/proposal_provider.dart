@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../data/models/swap_proposal_model.dart';
-import '../../data/repositories/proposal_repository.dart';
+import '../data/models/swap_proposal_model.dart';
+import '../data/repositories/proposal_repository.dart';
 
 class ProposalProvider extends ChangeNotifier {
   final ProposalRepository _repo = ProposalRepository();

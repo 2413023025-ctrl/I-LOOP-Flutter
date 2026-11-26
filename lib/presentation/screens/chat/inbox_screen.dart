@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../core/constants/app_colors.dart';
-import '../../core/utils/currency_formatter.dart';
-import '../../data/models/swap_proposal_model.dart';
-import '../../state/chat_provider.dart';
-import '../../state/proposal_provider.dart';
+import '../../../core/constants/app_colors.dart';
+import '../../../core/utils/currency_formatter.dart';
+import '../../../data/models/swap_proposal_model.dart';
+import '../../../state/chat_provider.dart';
+import '../../../state/proposal_provider.dart';
 import 'chat_room_screen.dart';
 
 class InboxScreen extends StatefulWidget {

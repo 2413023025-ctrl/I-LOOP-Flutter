@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../core/constants/app_colors.dart';
-import '../../core/utils/currency_formatter.dart';
-import '../../data/models/message_model.dart';
-import '../../state/auth_provider.dart';
-import '../../state/chat_provider.dart';
+import '../../../core/constants/app_colors.dart';
+import '../../../core/utils/currency_formatter.dart';
+import '../../../data/models/message_model.dart';
+import '../../../state/auth_provider.dart';
+import '../../../state/chat_provider.dart';
 
 class ChatRoomScreen extends StatefulWidget {
   final String chatRoomId;

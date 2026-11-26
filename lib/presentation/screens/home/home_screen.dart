@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../core/constants/app_categories.dart';
-import '../../core/constants/app_colors.dart';
-import '../../data/models/item_model.dart';
-import '../../state/items_provider.dart';
-import '../widgets/item_card.dart';
+import '../../../core/constants/app_categories.dart';
+import '../../../core/constants/app_colors.dart';
+import '../../../data/models/item_model.dart';
+import '../../../state/items_provider.dart';
+import '../../widgets/item_card.dart';
 import 'item_detail_screen.dart';
 
 class HomeScreen extends StatefulWidget {

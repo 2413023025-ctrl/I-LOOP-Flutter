@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import '../../core/constants/app_colors.dart';
-import '../../data/models/upcycle_post_model.dart';
+import '../../../core/constants/app_colors.dart';
+import '../../../data/models/upcycle_post_model.dart';
 
 class UpcycleDetailScreen extends StatelessWidget {
   final UpcyclePostModel post;
